@@ -1,0 +1,15 @@
+Arbitrage bot
+
+파이썬 버전
+Python 3.7
+
+업비트 모듈 설치
+pip install pyupbit
+
+바이낸스 모듈 설치
+pip install ccxt
+
+구동
+1. config_example.json에 내용 채워 넣고 config.json으로 이름 변경 (upbit, binance 각 폴더별 config 존재)
+2. 텔레그램 push를 위해 root 폴더의 config_example.json에 내용 채워 넣고 config.json으로 이름 변경
+3. upbit/upbit_bot 실행 / binance/binance_bot 실행

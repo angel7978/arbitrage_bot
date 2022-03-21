@@ -1,0 +1,9 @@
+{
+  "access_key" : "키를 적으시오",
+  "secret_key" : "파일명은 config.json으로 변경",
+  "commission_krw" : 0.0005,
+  "commission" : 0.0025,
+  "min_profit" : 0.01,
+  "min_trade_amount_krw": 10000,
+  "min_trade_amount": 0.001
+}
