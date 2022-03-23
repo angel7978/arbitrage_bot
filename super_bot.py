@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import ccxt
 import pyupbit
 
 import telegram_module
@@ -61,6 +62,8 @@ class SuperBot(metaclass=ABCMeta):
                         continue
 
                 step = 1
+            except ccxt.base.errors.RequestTimeout:
+                pass
             except json.decoder.JSONDecodeError:
                 pass
             except pyupbit.errors.UpbitError:
@@ -91,6 +94,9 @@ class SuperBot(metaclass=ABCMeta):
                 ticker = self.book.getTicker(chain_arr[i + 1], chain_arr[i])
 
             ask_price, ask_volume, bid_price, bid_volume = self.book.getClosedOrderBook(ticker)
+            if ask_price == 0 or bid_price == 0:
+                current_amount = 0
+                break
 
             commission = self.info.getCommission(ticker)
             if bid_position:
@@ -176,6 +182,9 @@ class SuperBot(metaclass=ABCMeta):
                 ticker = self.book.getTicker(chain_arr[i + 1], chain_arr[i])
 
             ask_price, ask_volume, bid_price, bid_volume = self.book.getClosedOrderBook(ticker, True)
+            if ask_price == 0 or bid_price == 0:
+                current_amount = 0
+                break
 
             commission = self.info.getCommission(ticker)
             if bid_position:

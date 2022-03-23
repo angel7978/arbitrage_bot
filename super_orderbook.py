@@ -71,7 +71,10 @@ class OrderBook:
                 'data': orderbook
             }
 
-        return orderbook['asks'][0][0], orderbook['asks'][0][1], orderbook['bids'][0][0], orderbook['bids'][0][1]
+        if len(orderbook['asks']) > 0 and len(orderbook['bids']) > 0:
+            return orderbook['asks'][0][0], orderbook['asks'][0][1], orderbook['bids'][0][0], orderbook['bids'][0][1]
+
+        return 0, 0, 0, 0
 
     def getNextChain(self, step=1):
         self.idx = (self.idx + step) % len(self.chain_list)
