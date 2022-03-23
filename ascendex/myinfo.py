@@ -18,9 +18,9 @@ class MyInfo(super_myinfo.MyInfo):
             self.min_profit = float(json_data["min_profit"])
             self.min_trade_amount = float(json_data["min_trade_amount"])
 
-        self.exchange = ccxt.binance({
+        self.exchange = ccxt.ascendex({
             'apiKey': self.access_key,
-            'secret': self.secret_key,
+            'secret': self.secret_key
         })
 
 

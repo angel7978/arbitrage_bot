@@ -18,11 +18,11 @@ class MyInfo(super_myinfo.MyInfo):
             self.min_profit = float(json_data["min_profit"])
             self.min_trade_amount = float(json_data["min_trade_amount"])
 
-        self.exchange = ccxt.binance({
+        self.exchange = ccxt.bitmart({
             'apiKey': self.access_key,
             'secret': self.secret_key,
+            'uid': 'john'
         })
-
 
 '''
 order {'info': {'symbol': 'XRPBNB', 'orderId': 2312440, 'clientOrderId': 'Pwt2z5PXjqsblNbFXNh6tp', 'transactTime': 1535465088497, 'price': '0.03000000', 'origQty': '50.00000000', 'executedQty': '0.00000000', 'cummulativeQuoteQty': '0.00000000', 'status': 'NEW', 'timeInForce': 'GTC', 'type': 'LIMIT', 'side': 'BUY'}, 'id': '2312440', 'timestamp': 1535465088497, 'datetime': '2018-08-28T14:04:48.497Z', 'lastTradeTimestamp': None, 'symbol': 'XRP/BNB', 'type': 'limit', 'side': 'buy', 'price': 0.03, 'amount': 50.0, 'cost': 0.0, 'filled': 0.0, 'remaining': 50.0, 'status': 'open', 'fee': None, 'trades': None}

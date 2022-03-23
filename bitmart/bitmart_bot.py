@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from binance import myinfo
-from binance import orderbook
+from bitmart import myinfo
+from bitmart import orderbook
 import super_bot
 
 
-class BinanceBot(super_bot.SuperBot):
+class BitmartBot(super_bot.SuperBot):
     def getInfo(self):
         return myinfo.MyInfo()
 
@@ -16,5 +16,8 @@ class BinanceBot(super_bot.SuperBot):
         return super().start(count, simulate)
 
 
-for thread in BinanceBot().start(1):
+for thread in BitmartBot().start(1):
     thread.join()
+# 170.13636701 (USDT)
+# 169.78000000 (USDC)
+

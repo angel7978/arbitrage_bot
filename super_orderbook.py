@@ -1,16 +1,87 @@
 # -*- coding: utf-8 -*-
 
 import ccxt
-import super_orderbook
+import time
 
 
-class OrderBook(super_orderbook.OrderBook):
-    base_coin = ['USDT', 'USDC', 'BUSD', 'DAI']
+class OrderBook:
+    exchange = None
+
+    idx = 0
+    chain_list = []
+    book_archive = {}
+    tickers = None
+    base_coin = []
 
     def __init__(self):
-        self.exchange = ccxt.binance()
-        super().__init__()
+        self.tickers = self.exchange.fetch_tickers()
 
+        for base in self.base_coin:
+            # make triangle chain (BASE-XXX-YYY-BASE or BASE-YYY-XXX-BASE)
+            for first_ticker in self.tickers:
+                if ('/%s' % base) not in first_ticker:
+                    continue
+
+                first_coin_name = first_ticker.split('/')[0]
+
+                for second_ticker in self.tickers:
+                    if first_ticker == second_ticker:
+                        continue
+
+                    second_coin_name = second_ticker.replace('/', '').replace(first_coin_name, '')
+
+                    last_ticker = self.getTicker(base, second_coin_name)
+                    if last_ticker not in self.tickers:
+                        continue
+
+                    middle_ticker = self.getTicker(first_coin_name, second_coin_name)
+                    middle_ticker_reverse = self.getTicker(first_coin_name, second_coin_name)
+                    if middle_ticker not in self.tickers and middle_ticker_reverse not in self.tickers:
+                        continue
+
+                    # print('%s-%s-%s-%s' % (base, second_coin_name, first_coin_name, base))
+                    self.chain_list.append('%s-%s-%s-%s' % (base, first_coin_name, second_coin_name, base))
+
+                    # print('%s-%s-%s-%s' % (base, first_coin_name, second_coin_name, base))
+                    self.chain_list.append('%s-%s-%s-%s' % (base, second_coin_name, first_coin_name, base))
+
+        print('chain count : %d' % len(self.chain_list))
+
+    def getTicker(self, base_coin, target_coin):
+        return target_coin + '/' + base_coin
+
+    def getPrice(self, ticker):
+        return self.exchange.fetch_ticker(ticker)['close']
+
+    def getClosedOrderBook(self, ticker, forced=False):
+        ms = time.time() * 1000.0
+        if ticker not in self.book_archive:
+            self.book_archive[ticker] = {
+                'time': 0,
+                'data': ''
+            }
+
+        book_data = self.book_archive[ticker]
+        if not forced and ms < book_data['time'] + 1000:
+            orderbook = book_data['data']
+        else:
+            orderbook = self.exchange.fetch_order_book(ticker)
+            self.book_archive[ticker] = {
+                'time': ms,
+                'data': orderbook
+            }
+
+        return orderbook['asks'][0][0], orderbook['asks'][0][1], orderbook['bids'][0][0], orderbook['bids'][0][1]
+
+    def getNextChain(self, step=1):
+        self.idx = (self.idx + step) % len(self.chain_list)
+        return self.chain_list[self.idx]
+
+    def removeChain(self, chain):
+        self.chain_list.remove(chain)
+
+    def isBidPosition(self, ticker):
+        return ticker in self.tickers
 
 '''
 binance = ccxt.binance()

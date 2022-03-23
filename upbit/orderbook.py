@@ -6,7 +6,7 @@ import time;
 
 class OrderBook:
     idx = 0
-    chain = []
+    chain_list = []
     book_archive = {}
 
     def __init__(self):
@@ -20,11 +20,11 @@ class OrderBook:
             replace_ticker = ticker.replace('BTC', 'KRW')
             if replace_ticker in self.krw_tickers:
                 chain = 'KRW-BTC-' + coin_name + '-KRW'
-                self.chain.append(chain)
+                self.chain_list.append(chain)
                 # print(chain)
 
                 chain = 'KRW-' + coin_name + '-BTC-KRW'
-                self.chain.append(chain)
+                self.chain_list.append(chain)
                 # print(chain)
 
         # make triangle chain (USDT-BTC-XXX-USDT) and (USDT-XXX-BTC-USDT)
@@ -33,14 +33,14 @@ class OrderBook:
             replace_ticker = ticker.replace('BTC', 'USDT')
             if replace_ticker in self.usdt_tickers:
                 chain = 'USDT-BTC-' + coin_name + '-USDT'
-                self.chain.append(chain)
+                self.chain_list.append(chain)
                 # print(chain)
 
                 chain = 'USDT-' + coin_name + '-BTC-USDT'
-                self.chain.append(chain)
+                self.chain_list.append(chain)
                 # print(chain)
 
-        print('chain count : %d' % len(self.chain))
+        print('chain count : %d' % len(self.chain_list))
 
     def getTicker(self, base_coin, target_coin):
         return base_coin + '-' + target_coin
@@ -69,9 +69,12 @@ class OrderBook:
 
         return closed_bids_asks['ask_price'], closed_bids_asks['ask_size'], closed_bids_asks['bid_price'], closed_bids_asks['bid_size']
 
+    def removeChain(self, chain):
+        self.chain_list.remove(chain)
+
     def getNextChain(self, step=1):
-        self.idx = (self.idx + step) % len(self.chain)
-        return self.chain[self.idx]
+        self.idx = (self.idx + step) % len(self.chain_list)
+        return self.chain_list[self.idx]
 
     def isBidPosition(self, ticker):
         return ticker in self.krw_tickers or ticker in self.btc_tickers or ticker in self.usdt_tickers

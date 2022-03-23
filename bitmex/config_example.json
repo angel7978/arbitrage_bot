@@ -1,0 +1,6 @@
+{
+  "api_key" : "키를 적어 주시오",
+  "secret_key" : "파일이름은 config.json으로 변경",
+  "commission" : 0.00075,
+  "min_profit" : 0.001
+}

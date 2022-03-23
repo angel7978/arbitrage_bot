@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from binance import myinfo
-from binance import orderbook
+from bitmex import myinfo
+from bitmex import orderbook
 import super_bot
 
 
-class BinanceBot(super_bot.SuperBot):
+class BitmexBot(super_bot.SuperBot):
     def getInfo(self):
         return myinfo.MyInfo()
 
@@ -16,5 +16,5 @@ class BinanceBot(super_bot.SuperBot):
         return super().start(count, simulate)
 
 
-for thread in BinanceBot().start(1):
+for thread in BitmexBot().start(1, True):
     thread.join()

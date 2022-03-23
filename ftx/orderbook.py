@@ -5,10 +5,10 @@ import super_orderbook
 
 
 class OrderBook(super_orderbook.OrderBook):
-    base_coin = ['USDT', 'USDC', 'BUSD', 'DAI']
+    base_coin = ['USDT', 'USD']
 
     def __init__(self):
-        self.exchange = ccxt.binance()
+        self.exchange = ccxt.ftx()
         super().__init__()
 
 

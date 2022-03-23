@@ -10,6 +10,7 @@ class MyInfo:
     def __init__(self):
         with open('config.json') as json_file:
             json_data = json.load(json_file)
+            self.title = json_data["title"]
             self.access_key = json_data["access_key"]
             self.secret_key = json_data["secret_key"]
             self.commission_krw = float(json_data["commission_krw"])
@@ -31,6 +32,8 @@ class MyInfo:
         return self.commission_krw if 'KRW' in ticker else self.commission
 
     def getBalance(self, coin):
+        if coin not in self.balance:
+            return 0
         return self.balance[coin]
 
     def updateBalance(self):
@@ -52,10 +55,10 @@ class MyInfo:
             ret = self.upbit.sell_limit_order(ticker, price, volume)
         return ret
 
-    def cancelOrder(self, uuid):
+    def cancelOrder(self, uuid, ticker):
         return self.upbit.cancel_order(uuid)
 
-    def getOrder(self, uuid):
+    def getOrder(self, uuid, ticker):
         return self.upbit.get_order(uuid)
 
     def getId(self, order):
