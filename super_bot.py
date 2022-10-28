@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import socket
+
 import ccxt
 import pyupbit
 
@@ -62,18 +64,11 @@ class SuperBot(metaclass=ABCMeta):
                         continue
 
                 step = 1
-            except ccxt.base.errors.RequestTimeout:
-                pass
-            except json.decoder.JSONDecodeError:
-                pass
-            except pyupbit.errors.UpbitError:
-                pass
             except IndexError:
                 self.book.removeChain(chain)
                 step = 0
             except Exception as e:
-                print('%s %s' % (chain, e))
-                traceback.print_exc()
+                print('Exception %s\n%s' % (chain, e))
 
     def floor(self, num):
         return math.floor(num * 100000000) / 100000000
